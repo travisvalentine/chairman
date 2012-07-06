@@ -1,7 +1,6 @@
+# First Slide
 
-# First Slide #
-
-# Second Slide #
+# Second Slide
 
 * something
 * something else
@@ -26,10 +25,3 @@ of the screen. The quick brown fox jumps over the lazy dog.
 .notes another dark side
 
 ![octocat](octocat.png)
-aa<!SLIDE>
-<!SLIDE>
-<!SLIDE>
-<!SLIDE>
-<!SLIDE>
-<!SLIDE>
-a
