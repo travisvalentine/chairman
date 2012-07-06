@@ -59,4 +59,4 @@ class Chairman
 
 end
 
-test = Chairman.new("slidesA.md")
+test = Chairman.new("slidesA.md") 
