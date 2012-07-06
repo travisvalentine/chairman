@@ -1,10 +1,10 @@
 require 'rubygems'
 require 'sinatra/base'
-require 'json'
-require 'nokogiri'
-require 'fileutils'
-require 'logger'
-require 'io/console'
+# require 'json'
+# require 'nokogiri'
+# require 'fileutils'
+# require 'logger'
+# require 'io/console'
 
 class Chairman
   attr_accessor :slides, :file
@@ -15,44 +15,40 @@ class Chairman
     verify(file)
   end
 
-  # def open_and_edit(file)
-  #   file.rewind
-  #   file = File.open(file, 'r+') {
-  #     slides = file.lines.select{ |line| line =~ /\A[#]/ } #|*]/ }
-  #     slides.each{ |slide| 
-  #       puts("<!SLIDE>test")
-  #     }
-  #   }
-  # end
-
   def verify(file)
-    file.lines.each { |line| puts "#{line}" }
+    file.lines.to_a[0...6].each { |line| puts "#{line}" }
     puts ""
     puts ""
-    puts "Is this the file you want to showoff? (y/n)"
+    puts "Does this look like the file you want to showoff? (y/n)"
     input = gets.chomp
     case input.downcase
-      when "y" then find_slides_in(file) # open_and_edit(file)
+      when "y" then open_and_edit(file)
       when "n" then no
       else
         puts "That was invalid. Try again."
     end
   end
 
-  def find_slides_in(file)
+  def open_and_edit(file)
     file.rewind
     if file.size == 0
       puts "File is empty"
     else
-      puts "Here are some possible slides we found:"
-      slides = file.lines.select{ |line| line =~ /\A[#]/ } #|*]/ }
-      slides.each { |slide| puts "#{slide}" }
+      create_showoff_slides_for(file)
     end
-    add_showoff_tags_to(slides, file)
   end
 
-  def add_showoff_tags_to(slides, file)
-    file.write('a')
+  def create_showoff_slides_for(file)
+    t_file = Tempfile.new('filename_temp.txt')
+    File.open(file, 'r') do |f|
+      f.lines.each do |line|
+        if line =~ /\A[#]/ || line =~ /!\[.*?\]\(.*?\.(png|jpeg|gif)\)/
+          t_file.puts "!SLIDE\n"
+        end
+        t_file.puts line
+      end
+    end
+    FileUtils.mv(t_file.path, "tagged-file.txt")
   end
 
   def no
